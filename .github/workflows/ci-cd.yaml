@@ -81,8 +81,16 @@ jobs:
       run: |
         ssh ${BASTION_USER}@${BASTION_HOST} << 'ENDSSH'
           export KUBECONFIG=~/.kube/config
+          echo "=== Pods ==="
           kubectl get pods -l app=fastapi-app -n fastapi
+          echo ""
+          echo "=== Service ==="
           kubectl get svc fastapi-app -n fastapi
-          kubectl get ingress fastapi-app -n fastapi
+          echo ""
+          echo "=== Ingress ==="
+          kubectl get ingress -n fastapi || echo "Ingress not found (may need domain configuration)"
+          echo ""
+          echo "=== Deployment Status ==="
+          kubectl get deployment fastapi-app -n fastapi
         ENDSSH
 
